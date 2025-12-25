@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 import "package:get/get.dart";
-import "package:storino/app/config/translations/app_translation.dart";
-import "package:storino/app/data/models/products.dart";
+import "package:storino/app/modules/initial/views/validations_view.dart";
 
+import "../../../config/translations/app_translation.dart";
 import "../../../data/data_sources/remote/remote_repository.dart";
+import "../../../data/models/products.dart";
+import "../views/orders_view.dart";
 
 class InitialController extends GetxController {
   late final RemoteRepository _remote = Get.put(RemoteRepository());
@@ -13,12 +15,15 @@ class InitialController extends GetxController {
   final ScrollController scrollController_1 = ScrollController();
   final ScrollController scrollController_2 = ScrollController();
   final ScrollController scrollController_3 = ScrollController();
+  final ScrollController scrollController_4 = ScrollController();
 
   ///
   final RxBool anAsyncCall = false.obs;
   final RxList<Products> products = <Products>[].obs;
+  final RxList<Products> orders = <Products>[].obs;
   final Rx<Products> product = Products().obs;
   final RxString title = AppKeys.labelFeatured.name.tr.obs;
+  final Duration delays = 5.seconds;
 
   ///
   @override
@@ -32,10 +37,34 @@ class InitialController extends GetxController {
   Future<void> getAllProducts() async {
     FocusManager.instance.primaryFocus?.unfocus();
     anAsyncCall.value = true;
-    return Future<void>.delayed(10.seconds, () async {
+    return Future<void>.delayed(delays, () async {
       final List<Products> products = _remote.generateRandomProducts();
       anAsyncCall.value = false;
       this.products.value = products;
+    });
+  }
+
+  Future<void> handleCart() async {
+    final Products product = this.product.value;
+    final bool productInCart = orders.where((Products value) => value.id == product.id).toList().isNotEmpty;
+    if (productInCart) {
+      orders.remove(product);
+    } else {
+      orders.add(product);
+      return Get.to(() {
+        return const OrdersView();
+      });
+    }
+  }
+
+  Future<void> checkoutOrders() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+    anAsyncCall.value = true;
+    return Future<void>.delayed(delays, () async {
+      anAsyncCall.value = false;
+      return await Get.offAll(() {
+        return const ValidationsView();
+      })!.then((_) => orders.clear());
     });
   }
 
