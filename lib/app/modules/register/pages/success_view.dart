@@ -173,7 +173,7 @@ class _Body extends GetView<RegisterController> {
               title: Obx(() {
                 final int countdown = controller.countdown.value;
                 return Text(
-                  "${AppKeys.labelRedirection.name.tr} $countdown ${AppKeys.labelSecondes.name.tr}",
+                  "${AppKeys.labelRedirection.name.tr} \n $countdown ${AppKeys.labelSecondes.name.tr}",
                   textAlign: TextAlign.center,
                   style: GoogleFonts.poppins(
                     color: AppTheme.main_color_1,
