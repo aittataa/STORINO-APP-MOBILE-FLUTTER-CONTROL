@@ -2,6 +2,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
+import "package:storino/app/shared/outline_button.dart";
 
 import "../../../config/constants/app_constant.dart";
 import "../../../config/functions/app_function.dart";
@@ -14,6 +15,7 @@ import "../../../shared/image_view.dart";
 import "../../../shared/scrolled_bar.dart";
 import "../controllers/initial_controller.dart";
 import "initial_view.dart";
+import "orders_view.dart";
 
 class DetailsView extends GetView<InitialController> {
   const DetailsView({super.key});
@@ -93,6 +95,16 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
           return HeadTitle(title: product.title.toString());
         },
       ),
+      trailing: HeadIcon(
+        asset: AppMessage.asset_icon_cart,
+        color: appTheme.iconTheme.color!,
+        size: 25,
+        onTap: () async {
+          return await Get.to(() {
+            return const OrdersView();
+          });
+        },
+      ),
     );
   }
 
@@ -115,7 +127,11 @@ class _Body extends GetView<InitialController> {
 
     ///
     return Obx(() {
+      final List<Products> orders = controller.orders;
       final Products product = controller.product.value;
+      final bool productInCart = orders.where((Products value) => value.id == product.id).toList().isNotEmpty;
+
+      ///
       return ScrolledBar(
         controller: controller.scrollController_2,
         child: SingleChildScrollView(
@@ -321,6 +337,19 @@ class _Body extends GetView<InitialController> {
                       ),
                     );
                   },
+                ),
+              ),
+              ListTile(
+                dense: true,
+                minTileHeight: 25,
+                minLeadingWidth: 0,
+                minVerticalPadding: 0,
+                horizontalTitleGap: 0,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                title: OutlineButton(
+                  onPressed: () => controller.handleCart(),
+                  label: productInCart ? AppKeys.labelDeleteFromCart.name.tr : AppKeys.labelAddToCart.name.tr,
+                  backColor: productInCart ? AppTheme.red_color : AppTheme.main_color_1,
                 ),
               ),
             ],
