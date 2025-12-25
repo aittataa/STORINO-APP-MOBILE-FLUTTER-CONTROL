@@ -53,4 +53,10 @@ enum AppKeys {
   labelPasswordHint,
   labelRegister,
   labelVerify,
+  labelAddToCart,
+  labelOrders,
+  labelDeleteFromCart,
+  labelCheckoutOrders,
+  labelNoProductsFound,
+  labelNoOrdersFound,
 }
