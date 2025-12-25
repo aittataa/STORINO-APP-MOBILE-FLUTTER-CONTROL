@@ -12,7 +12,9 @@ import "../../../data/models/products.dart";
 import "../../../shared/disabled.dart";
 import "../../../shared/empty_box.dart";
 import "../../../shared/header_bar.dart";
+import "../../../shared/load_bar.dart";
 import "../../../shared/outline_button.dart";
+import "../../../shared/progress_bar.dart";
 import "../../../shared/scrolled_bar.dart";
 import "../controllers/initial_controller.dart";
 import "../widgets/product_shape.dart";
@@ -44,11 +46,19 @@ class OrdersView extends GetView<InitialController> {
     ///
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: systemUiOverlayStyle,
-      child: Scaffold(
-        appBar: _Header(toolbarHeight: toolbarHeight),
-        body: const _Body(),
-        bottomNavigationBar: const _Footer(),
-      ),
+      child: Obx(() {
+        final bool anAsyncCall = controller.anAsyncCall.value;
+        return ProgressBar(
+          anAsyncCall: anAsyncCall,
+          progressColor: appTheme.colorScheme.surface,
+          progressIndicator: const LoadBar(spinner: Spinner.SpinKitFadingCircle, color: AppTheme.main_color_1),
+          child: Scaffold(
+            appBar: _Header(toolbarHeight: toolbarHeight),
+            body: const _Body(),
+            bottomNavigationBar: const _Footer(),
+          ),
+        );
+      }),
     );
   }
 }
@@ -112,8 +122,8 @@ class _Body extends GetView<InitialController> {
 
     ///
     return Obx(() {
-      final bool anAsyncCall = controller.anAsyncCall.value;
-      if (anAsyncCall) return const _LoadBar();
+      // final bool anAsyncCall = controller.anAsyncCall.value;
+      // if (anAsyncCall) return const _LoadBar();
       final List<Products> orders = controller.orders;
       if (orders.isEmpty) return EmptyBox(label: AppKeys.labelNoOrdersFound.name.tr);
 
@@ -184,7 +194,7 @@ class _Footer extends GetView<InitialController> {
               horizontalTitleGap: 0,
               contentPadding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
               title: OutlineButton(
-                onPressed: () => controller.handleCart(),
+                onPressed: () => controller.checkoutOrders(),
                 label: AppKeys.labelCheckoutOrders.name.tr,
                 radius: AppConstant.defaultRadius - 6,
               ),
