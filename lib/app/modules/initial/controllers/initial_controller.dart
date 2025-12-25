@@ -62,7 +62,7 @@ class InitialController extends GetxController {
     anAsyncCall.value = true;
     return Future<void>.delayed(delays, () async {
       anAsyncCall.value = false;
-      return await Get.offAll(() {
+      return await Get.off(() {
         return const ValidationsView();
       })!.then((_) => orders.clear());
     });
