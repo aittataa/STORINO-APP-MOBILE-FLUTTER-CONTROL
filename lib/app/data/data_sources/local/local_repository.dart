@@ -47,8 +47,8 @@ class AppRepository extends GetConnect {
   }
 
   Future<void> get getLanguage async {
-    // final String code =  await getSelectedLanguage() ?? await getInitialLanguage();
-    final String code = AppFunction.app_language_code;
+    final String code = await getSelectedLanguage() ?? await getInitialLanguage();
+    // final String code = AppFunction.app_language_code;
     final Locale locale = Locale(code);
     AppFunction.app_language_code = code;
     log("app_language : $code");

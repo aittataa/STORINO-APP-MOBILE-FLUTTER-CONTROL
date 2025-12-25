@@ -9,10 +9,21 @@ import "app/config/functions/app_function.dart";
 import "app/config/messages/app_message.dart";
 import "app/config/themes/app_theme.dart";
 import "app/config/translations/app_translation.dart";
+import "app/data/data_sources/local/local_repository.dart";
 import "app/routes/app_pages.dart";
+
+/// TODO : Init Settings
+Future<void> _initSettings() async {
+  final AppRepository app = Get.put(AppRepository());
+  await app.applyMode;
+  await app.getLanguage;
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // TODO : Init Settings
+  await _initSettings();
 
   /// TODO : Run App
   return runApp(const STORINO());
