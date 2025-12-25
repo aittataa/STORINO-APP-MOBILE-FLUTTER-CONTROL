@@ -30,13 +30,13 @@ class RegisterController extends GetxController {
     /// TODO : onInit
     super.onInit();
 
-    if (kDebugMode) {
-      nameController.text = "AIT TATA ABDERRAHIM";
-      emailController.text = "aittata.abderrahim@gmail.com";
-      phoneController.text = "0673377573";
-      passwordController.text = "azerty@123456";
-      pinController.text = "123456";
-    }
+    //if (kDebugMode) {
+    nameController.text = "AIT TATA ABDERRAHIM";
+    emailController.text = "aittata.abderrahim@gmail.com";
+    phoneController.text = "0673377573";
+    passwordController.text = "azerty@123456";
+    pinController.text = "123456";
+    //}
     return log("onInit RegisterController");
   }
 
