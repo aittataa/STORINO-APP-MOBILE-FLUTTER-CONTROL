@@ -1,10 +1,8 @@
 import "dart:developer";
 
-import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
-import "../../initial/views/initial_view.dart";
 import "../../register/views/register_view.dart";
 
 class SplashController extends GetxController {
@@ -17,14 +15,7 @@ class SplashController extends GetxController {
 
   Future<Widget> screenFunction(BuildContext context) async {
     try {
-      /// TODO : Debug Mode
-      if (kDebugMode) {
-        return const InitialView();
-        return const RegisterView();
-      }
-
-      /// TODO : Main View
-      return const InitialView();
+      return const RegisterView();
     } on Exception {
       return const RegisterView();
     } catch (e) {
