@@ -123,7 +123,6 @@ class RemoteRepository extends GetConnect {
       "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f",
       "https://images.unsplash.com/photo-1591561954557-26941169b49e",
       "https://images.unsplash.com/photo-1548036328-c9fa89d128fa",
-      "https://images.unsplash.com/photo-1618354691249-18772d8b6b59",
       "https://images.unsplash.com/photo-1622560480605-d83c853bc5c3",
       "https://images.unsplash.com/photo-1586023492125-27b2c045efd7",
       "https://images.unsplash.com/photo-1524758631624-e2822e304c36",
@@ -164,8 +163,9 @@ class RemoteRepository extends GetConnect {
   }
 
   List<Products> generateRandomProducts() {
-    return List<Products>.generate(100, (_) {
+    return List<Products>.generate(100, (int i) {
       return Products(
+        id: i + 1,
         title: randomTitle(),
         description: randomDescriptions(),
         price: _random.nextDouble() * 495 + 5,
