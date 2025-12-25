@@ -14,7 +14,7 @@ enum Products_ {
 }
 
 class Products {
-  late String? id;
+  late int? id;
   late String? title;
   late String? description;
   late double price;
