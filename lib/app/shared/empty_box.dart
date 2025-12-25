@@ -1,7 +1,10 @@
 import "package:flutter/material.dart";
+import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 
+import "../config/constants/app_constant.dart";
+import "../config/messages/app_message.dart";
 import "../config/themes/app_theme.dart";
 
 class EmptyBox extends StatelessWidget {
@@ -13,7 +16,14 @@ class EmptyBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///
     final bool isTablet = context.isTablet;
+    final double screenWidth = isTablet ? AppConstant.screenTablet : AppConstant.screenWidth;
+    final double screenHeight = isTablet ? AppConstant.screenHeight : AppConstant.screenHeight;
+    final double width = screenWidth * .5;
+    final double height = screenWidth * .5;
+
+    ///
     return Container(
       alignment: Alignment.center,
       padding: EdgeInsets.symmetric(
@@ -25,12 +35,12 @@ class EmptyBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          // SvgPicture.asset(
-          //   AppMessage.asset_empty_box,
-          //   color: AppTheme.main_color_2,
-          //   width: 100,
-          //   height: 100,
-          // ),
+          SvgPicture.asset(
+            AppMessage.asset_icon_warning,
+            color: AppTheme.red_color.withValues(alpha: .25),
+            width: width,
+            height: height,
+          ),
           ListTile(
             dense: true,
             contentPadding: EdgeInsets.zero,
@@ -41,9 +51,10 @@ class EmptyBox extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: GoogleFonts.poppins(
-                color: AppTheme.main_color_1,
-                fontWeight: FontWeight.w600,
+                color: AppTheme.red_color,
+                fontWeight: FontWeight.w500,
                 letterSpacing: .5,
+                fontSize: 17.5,
               ),
             ),
           ),
