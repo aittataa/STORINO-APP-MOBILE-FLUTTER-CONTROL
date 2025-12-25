@@ -4,6 +4,7 @@ import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:shimmer/shimmer.dart";
+import "package:storino/app/shared/empty_box.dart";
 
 import "../../../config/constants/app_constant.dart";
 import "../../../config/functions/app_function.dart";
@@ -15,8 +16,9 @@ import "../../../shared/header_bar.dart";
 import "../../../shared/image_view.dart";
 import "../../../shared/scrolled_bar.dart";
 import "../controllers/initial_controller.dart";
-import "../wigdets/product_shape.dart";
+import "../widgets/product_shape.dart";
 import "details_view.dart";
+import "orders_view.dart";
 import "products_view.dart";
 
 class InitialView extends GetView<InitialController> {
@@ -37,7 +39,7 @@ class InitialView extends GetView<InitialController> {
     /// TODO : isDarkMode
     final bool isDarkMode = context.isDarkMode;
     final SystemUiOverlayStyle systemUiOverlayStyle = AppFunction.systemUiOverlayStyle(
-      appTheme.colorScheme.onSurface,
+      appTheme.colorScheme.surface,
       mode: isDarkMode ? Brightness.light : Brightness.dark,
       isDarkMode: isDarkMode,
     );
@@ -64,10 +66,6 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
     /// TODO : App Theme
     final ThemeData appTheme = Theme.of(context);
 
-    /// TODO : isRightToLeft
-    final bool isRightToLeft = AppFunction.isRightToLeft;
-    final String asset_back_icon = isRightToLeft ? AppMessage.asset_icon_right : AppMessage.asset_icon_left;
-
     /// TODO : isTablet
     final bool isTablet = context.isTablet;
     final double toolbarHeight = isTablet ? AppConstant.tabletBarHeight : AppConstant.phoneBarHeight;
@@ -75,7 +73,6 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
     ///
     return HeaderBar(
       toolbarHeight: toolbarHeight,
-      color: AppTheme.transparent_color,
       leading: SvgPicture.asset(AppMessage.asset_app_icon, color: AppTheme.main_color_1, width: 50, height: 50),
       title: ListTile(
         dense: true,
@@ -107,6 +104,16 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
           ),
         ),
       ),
+      trailing: HeadIcon(
+        asset: AppMessage.asset_icon_cart,
+        color: appTheme.iconTheme.color!,
+        size: 25,
+        onTap: () async {
+          return await Get.to(() {
+            return const OrdersView();
+          });
+        },
+      ),
     );
   }
 
@@ -126,14 +133,15 @@ class _Body extends GetView<InitialController> {
     final bool isTablet = context.isTablet;
     final double screenWidth = isTablet ? AppConstant.screenTablet : AppConstant.screenWidth;
     final double screenHeight = isTablet ? AppConstant.screenHeight : AppConstant.screenHeight;
-    final double width = screenWidth * .75;
-    final double height = screenWidth * .75;
 
     ///
     return Obx(() {
       final bool anAsyncCall = controller.anAsyncCall.value;
       if (anAsyncCall) return const _LoadBar();
       final List<Products> products = controller.products;
+      if (products.isEmpty) return EmptyBox(label: AppKeys.labelNoProductsFound.name.tr);
+
+      ///
       return ScrolledBar(
         controller: controller.scrollController_1,
         child: SingleChildScrollView(
@@ -349,7 +357,6 @@ class _Body extends GetView<InitialController> {
                   child: GridView.builder(
                     shrinkWrap: true,
                     scrollDirection: Axis.horizontal,
-                    controller: controller.scrollController_2,
                     itemCount: products.length,
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
                     gridDelegate: AppFunction.gridDelegate(crossAxisCount: 1, spacing: 10, childAspectRatio: 1.5),
@@ -402,7 +409,6 @@ class _Body extends GetView<InitialController> {
                   height: screenHeight * .20,
                   child: ListView.separated(
                     shrinkWrap: true,
-                    controller: controller.scrollController_3,
                     itemCount: products.length,
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
@@ -487,8 +493,6 @@ class _LoadBar extends StatelessWidget {
     final bool isTablet = context.isTablet;
     final double screenWidth = isTablet ? AppConstant.screenTablet : AppConstant.screenWidth;
     final double screenHeight = isTablet ? AppConstant.screenHeight : AppConstant.screenHeight;
-    final double width = screenWidth * .75;
-    final double height = screenWidth * .75;
 
     ///
     return Shimmer.fromColors(
