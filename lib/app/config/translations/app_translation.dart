@@ -52,11 +52,12 @@ enum AppKeys {
   labelPasswordLabel,
   labelPasswordHint,
   labelRegister,
-  labelVerify,
   labelAddToCart,
   labelOrders,
   labelDeleteFromCart,
   labelCheckoutOrders,
   labelNoProductsFound,
   labelNoOrdersFound,
+  labelContinueShopping,
+  labelValidatedOrders,
 }
