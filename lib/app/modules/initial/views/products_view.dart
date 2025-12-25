@@ -11,8 +11,9 @@ import "../../../data/models/products.dart";
 import "../../../shared/header_bar.dart";
 import "../../../shared/scrolled_bar.dart";
 import "../controllers/initial_controller.dart";
-import "../wigdets/product_shape.dart";
+import "../widgets/product_shape.dart";
 import "initial_view.dart";
+import "orders_view.dart";
 
 class ProductsView extends GetView<InitialController> {
   const ProductsView({super.key});
@@ -41,8 +42,6 @@ class ProductsView extends GetView<InitialController> {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: systemUiOverlayStyle,
       child: Scaffold(
-        extendBody: true,
-        extendBodyBehindAppBar: true,
         appBar: _Header(toolbarHeight: toolbarHeight),
         body: const _Body(),
       ),
@@ -71,8 +70,10 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
     ///
     return HeaderBar(
       toolbarHeight: toolbarHeight,
-      color: appTheme.colorScheme.onSurface,
       leading: HeadIcon(
+        asset: asset_back_icon,
+        color: appTheme.iconTheme.color!,
+        size: 25,
         onTap: () async {
           if (Navigator.canPop(context)) {
             return Navigator.pop(context);
@@ -81,14 +82,21 @@ class _Header extends GetView<InitialController> implements PreferredSizeWidget 
             return const InitialView();
           });
         },
-        asset: asset_back_icon,
-        color: appTheme.iconTheme.color!,
-        size: 25,
       ),
       title: Builder(
         builder: (_) {
           final String title = controller.title.value;
           return HeadTitle(title: title);
+        },
+      ),
+      trailing: HeadIcon(
+        asset: AppMessage.asset_icon_cart,
+        color: appTheme.iconTheme.color!,
+        size: 25,
+        onTap: () async {
+          return await Get.to(() {
+            return const OrdersView();
+          });
         },
       ),
     );
